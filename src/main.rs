@@ -8,7 +8,7 @@ struct MyLogger;
 
 impl log::Log for MyLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
-        metadata.level() <= Level::Info
+        metadata.level() <= Level::Trace
     }
 
     fn log(&self, record: &Record) {
@@ -168,7 +168,9 @@ fn main() {
 //	env_logger::init();
 
     log::set_logger(&MY_LOGGER).unwrap();
-    log::set_max_level(LevelFilter::Info);
+   // log::set_max_level(LevelFilter::Info);
+    log::set_max_level(LevelFilter::Trace);
+
     info!("hello log");
     warn!("warning");
     error!("oops");
