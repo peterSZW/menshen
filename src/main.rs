@@ -75,7 +75,7 @@ $Content$";
 
 fn mainEntry() {
     
-    env_logger::init();
+//    env_logger::init();
 
     let res_size = env::var("RES_SIZE")
         .unwrap_or("0".to_string())
@@ -165,6 +165,8 @@ fn mainEntry() {
 }
 
 fn main() {
+//	env_logger::init();
+
     log::set_logger(&MY_LOGGER).unwrap();
     log::set_max_level(LevelFilter::Info);
     info!("hello log");
