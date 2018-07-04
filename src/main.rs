@@ -117,7 +117,7 @@ fn mainEntry() {
     // let res = ResponseData { data: res_bytes };
 
     let threads = env::var("THREADS")
-        .unwrap_or("2".to_string())
+        .unwrap_or("1".to_string())
         .parse()
         .unwrap();
     println!("multi-threaded server starting: {} threads", threads);
