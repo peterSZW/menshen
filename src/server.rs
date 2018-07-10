@@ -119,7 +119,7 @@ impl Server {
         // We never expect a write event for our `Server` token . A write event for any other token
         // should be handed off to that connection.
         if event.is_writable() {
-            // println!("### WRITE EVENT FOR {:?}", token);
+            trace!("### WRITE EVENT FOR {:?}", token);
             assert!(self.token != token, "Received writable event for Server");
 
             /// Forward a readable event to an established connection.
@@ -129,6 +129,8 @@ impl Server {
             /// broadcast.
             match self.connection(token).writable(poll) {
                 Ok(()) => {
+                    //trace!("Server.rs: Recive writable FOR TOKEN:{:?}", token);
+
                     let message = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body>Hello world</body></html>\r\n";
                     let rc_message = Rc::new(message.to_vec());
                     self.connection(token)
@@ -168,8 +170,8 @@ impl Server {
                     // should return empty message and keep it inside connection to reduce data movement as it unused
                     Some(message) => {
                         // println!("GOT MESSAGE {}", String::from_utf8_lossy(&message));
-                        // let rc_message = Rc::new(message);
-                        // conn.send_message(rc_message.clone()).unwrap();
+                        //let rc_message = Rc::new(message);
+                        //conn.send_message(rc_message.clone()).unwrap();
                     }
                     None => {}
                 }
@@ -199,7 +201,10 @@ impl Server {
             // Log an error if there is no socket, but otherwise move on so we do not tear down the
             // entire server.
             let sock = match self.sock.accept() {
-                Ok((sock, _)) => sock,
+                Ok((sock, _)) => {
+			trace!("accept new socker {:?}",sock);
+ 			sock
+			},
                 Err(e) => {
                     if e.kind() == ErrorKind::WouldBlock {
                         debug!("accept encountered WouldBlock");

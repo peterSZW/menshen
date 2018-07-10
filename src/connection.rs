@@ -242,9 +242,10 @@ impl Connection {
 
         // self.interest.insert(Ready::writable());
         // self.interest.remove(Ready::readable());
+	trace!("===reregister in readable");
         let _ = self.reregister(poll);
 
-        let msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body>Hello world</body></html>\r\n";
+        let msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body>Hello world,peter</body></html>\r\n";
         Ok(Some(msg.to_vec()))
     }
 
@@ -266,6 +267,8 @@ impl Connection {
 
         self.interest.insert(Ready::readable());
         self.interest.remove(Ready::writable());
+        trace!("===reregister in writeable");
+
         let _ = self.reregister(poll);
 
         Ok(())
@@ -343,7 +346,7 @@ impl Connection {
             self.interest,
             PollOpt::edge() | PollOpt::oneshot(),
         ).or_else(|e| {
-            error!("Failed to reregister {:?}, {:?}", self.token, e);
+            error!("Failed to register {:?}, {:?}", self.token, e);
             Err(e)
         })
     }
