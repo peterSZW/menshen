@@ -46,8 +46,10 @@ impl Server {
             let mut events = Events::with_capacity(1024);
             poll.poll(&mut events, None)?;
             for event in events.iter() {
-                trace!("EVENT={:?}", event);
+		trace!("");
+                trace!("------>>>>>>  EVENT={:?}", event);
                 self.ready(poll, event.token(), event.readiness());
+		trace!("^^^^^^");
             }
         }
     }
@@ -93,7 +95,7 @@ impl Server {
     }
 
     fn ready(&mut self, poll: &mut Poll, token: Token, event: Ready) {
-        debug!("GOT {:?} EVENT = {:?}", token, event);
+        //debug!("GOT {:?} EVENT = {:?}", token, event);
 
         if self.token != token && self.conns.contains(token) == false {
             debug!("Failed to find connection for {:?}", token);
@@ -166,17 +168,21 @@ impl Server {
                 self.accept(poll);
             } else {
                 let conn = self.connection(token);
+
                 match conn.readable(poll).unwrap() {
                     // should return empty message and keep it inside connection to reduce data movement as it unused
                     Some(message) => {
                         // println!("GOT MESSAGE {}", String::from_utf8_lossy(&message));
                         //let rc_message = Rc::new(message);
                         //conn.send_message(rc_message.clone()).unwrap();
+
                     }
                     None => {}
                 }
             }
         }
+
+/*      trace!("  .....ready rerigster...................");
 
         if self.token != token {
             match self.connection(token).reregister(poll) {
@@ -188,6 +194,10 @@ impl Server {
                 }
             }
         }
+
+	trace!("  .....ready end...................");
+*/
+
     }
 
     /// Accept a _new_ client connection.

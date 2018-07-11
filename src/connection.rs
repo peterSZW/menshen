@@ -171,7 +171,8 @@ impl Connection {
                         self.proto = Proto::HTTP;
                     }
 
-                    println!("ACHTUNG!!! IS PLAIN {}", is_plain);
+                    trace!("ACHTUNG!!! IS PLAIN {}", is_plain);
+		    trace!("{:?}",buf);
                 }
 
                 // println!("LEN {} {}", buf.remaining_mut(), buf.capacity());
@@ -242,9 +243,7 @@ impl Connection {
 
         // self.interest.insert(Ready::writable());
         // self.interest.remove(Ready::readable());
-	trace!("====reregister in readable");
         let _ = self.reregister(poll);
-	trace!("----reregister in readable");
 
         let msg = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body>Hello world,peter</body></html>\r\n";
         Ok(Some(msg.to_vec()))
@@ -268,10 +267,7 @@ impl Connection {
 
         self.interest.insert(Ready::readable());
         self.interest.remove(Ready::writable());
-
-        trace!("===reregister in writeable");
         let _ = self.reregister(poll);
-	trace!("----reregister in writerable");
         Ok(())
     }
 

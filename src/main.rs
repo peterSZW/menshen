@@ -117,7 +117,7 @@ fn mainEntry() {
     // let res = ResponseData { data: res_bytes };
 
     let threads = env::var("THREADS")
-        .unwrap_or("1".to_string())
+        .unwrap_or("2".to_string())
         .parse()
         .unwrap();
     println!("multi-threaded server starting: {} threads", threads);
@@ -165,10 +165,9 @@ fn mainEntry() {
 }
 
 fn main() {
-//	env_logger::init();
+    env_logger::init();
 
-    log::set_logger(&MY_LOGGER).unwrap();
-   // log::set_max_level(LevelFilter::Info);
+    //log::set_logger(&MY_LOGGER).unwrap();
     log::set_max_level(LevelFilter::Trace);
 
     info!("hello log");
