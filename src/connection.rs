@@ -1,4 +1,5 @@
 extern crate httparse;
+//use httparse::*;
 
 use std::collections::VecDeque;
 use std::io;
@@ -173,6 +174,35 @@ impl Connection {
 
                     trace!("ACHTUNG!!! IS PLAIN {}", is_plain);
 		    trace!("{:?}",buf);
+
+
+//=====================
+    let mut headers = [httparse::EMPTY_HEADER; 16];
+    let mut req = httparse::Request::new(&mut headers);
+    let res = req.parse(&buf).unwrap();
+    
+    if res.is_partial() {
+        trace!("{:?}",req);
+        match req.method {
+            Some(ref method) => {
+                trace!("{:?}",method);
+            },
+            None => {
+            }
+        }
+
+        match req.path {
+            Some(ref path) => {
+                trace!("{:?}",path);
+            },
+            None => {
+            }
+        }
+    } else {
+        trace!("request partial {:?}",req);
+    }
+//---------------------
+
                 }
 
                 // println!("LEN {} {}", buf.remaining_mut(), buf.capacity());
